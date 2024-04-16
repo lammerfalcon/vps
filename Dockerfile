@@ -19,7 +19,7 @@ COPY --link . .
 RUN npm run build
 RUN npm prune
 
-# Run
+# Run nuxt
 FROM base
 
 ENV PORT=$PORT
