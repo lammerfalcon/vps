@@ -17,13 +17,13 @@ RUN npm install --production=false
 COPY --link . .
 
 RUN npm run build
-#RUN npm prune
-#
-## Run
-#FROM base
-#
-#ENV PORT=$PORT
-#
-#COPY --from=build /src/.output /src/.output
+RUN npm prune
 
-#CMD [ "node", ".output/server/index.mjs" ]
+# Run
+FROM base
+
+ENV PORT=$PORT
+
+COPY --from=build /src/.output /src/.output
+
+CMD [ "node", ".output/server/index.mjs" ]
