@@ -1,8 +1,6 @@
 <template>
   <div>
-    {{data}}
-    DEV MODE test
-    <NuxtWelcome />
+   SOSAT MAIN
   </div>
 </template>
 <script setup lang="ts">
