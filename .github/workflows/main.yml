@@ -24,29 +24,34 @@ jobs:
           docker build -t lammerfalcon/nuxt3:latest .
           docker push lammerfalcon/nuxt3:latest
 
-      - name: Deploy to VPS
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+      - name: Deploy to VPS - Dev
+        if: github.ref == 'refs/heads/dev'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-              # Deploy main branch
-              docker stop prod-container || true
-              docker rm prod-container || true
-              docker pull lammerfalcon/nuxt3:latest
-              cd service/main/vps/
-            elif [ "${{ github.ref }}" == "refs/heads/dev" ]; then
-              # Deploy dev branch
-              docker stop dev-container || true
-              docker rm dev-container || true
-              docker pull lammerfalcon/nuxt3:latest
-              cd service/dev/vps/
-            fi
-
-            git checkout ${{ github.ref }}
+            docker stop dev-container || true
+            docker rm dev-container || true
+            docker pull lammerfalcon/nuxt3:latest
+            cd service/dev/vps/
+            git checkout dev
             git pull
+            docker-compose up -d --build
 
+      - name: Deploy to VPS - Main
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            docker stop prod-container || true
+            docker rm prod-container || true
+            docker pull lammerfalcon/nuxt3:latest
+            cd service/main/vps/
+            git checkout main
+            git pull
             docker-compose up -d --build
