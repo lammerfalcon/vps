@@ -10,6 +10,10 @@ jobs:
   deploy_main:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    env:
+      TAG: latest
+      PORT: 3000
+      SUBDOMAIN: lammerfalcon.tech
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v4
@@ -42,6 +46,10 @@ jobs:
   deploy_dev:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
+    env:
+      TAG: dev
+      PORT: 3001
+      SUBDOMAIN: dev.lammerfalcon.tech
     steps:
       - name: Checkout dev branch
         uses: actions/checkout@v4
