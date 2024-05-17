@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>СОСАТЬ ДЕВ!</h1>
-    <NuxtLink to="https://lammerlfalcon.com" external> ПОСОСАТЬ НА ПРОД</NuxtLink>
+   SOSAT MAIN
   </div>
 </template>
 <script setup lang="ts">

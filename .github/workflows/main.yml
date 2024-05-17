@@ -40,7 +40,7 @@ jobs:
             docker pull lammerfalcon/nuxt3:latest
             cd service/main/vps
             git pull
-            docker-compose up -d --build
+            docker-compose -f docker-compose.main.yml up -d --build
 
   deploy_dev:
     runs-on: ubuntu-latest
