@@ -5,8 +5,8 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true
     },
-    // scheduledTasks: {
-    //   '* * * * *': ['tg:message']
-    // }
+    scheduledTasks: {
+      '* * * * *': ['tg:message']
+    }
   }
 })
