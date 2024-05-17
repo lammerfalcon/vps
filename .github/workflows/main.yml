@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             docker pull lammerfalcon/nuxt3:latest
-            cd service/vps/main
+            cd service/main/vps
             git checkout main
             git pull
             docker-compose up -d --build
@@ -64,7 +64,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             docker pull lammerfalcon/nuxt3:dev
-            cd service/vps/dev
+            cd service/dev/vps
             git checkout dev
             git pull
             docker-compose -f docker-compose.dev.yml up -d --build
