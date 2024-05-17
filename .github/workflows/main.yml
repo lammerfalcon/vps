@@ -46,7 +46,7 @@ jobs:
               docker stop dev-container || true
               docker rm dev-container || true
               docker pull lammerfalcon/nuxt3:latest
-              cd service/dev/vps
+              cd service/dev/vps/
               git checkout dev
               git pull
               docker-compose up -d --build
