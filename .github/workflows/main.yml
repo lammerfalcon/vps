@@ -38,6 +38,7 @@ jobs:
               docker rm prod-container || true
               docker pull lammerfalcon/nuxt3:latest
               cd service/main/vps/
+              git checkout main
               git pull
               docker-compose up -d --build
             elif [ "${{ github.ref }}" == "refs/heads/dev" ]; then
@@ -46,6 +47,7 @@ jobs:
               docker rm dev-container || true
               docker pull lammerfalcon/nuxt3:latest
               cd service/dev/vps
+              git checkout dev
               git pull
               docker-compose up -d --build
             fi
