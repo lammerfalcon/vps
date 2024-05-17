@@ -31,8 +31,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            docker stop dev-container || true
-            docker rm dev-container || true
+            docker stop vps_dev-container_1 || true
+            docker rm vps_dev-container_1 || true
             docker pull lammerfalcon/nuxt3:latest
             cd service/dev/vps/
             git checkout dev
