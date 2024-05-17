@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-
+      - dev
 
 jobs:
-  build_and_push:
+  build_and_push_main:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repo
@@ -32,6 +33,38 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             docker pull lammerfalcon/nuxt3:latest
-            cd service/vps/
+            cd service/vps/main
+            git checkout main
             git pull
             docker-compose up -d --build
+
+  build_and_push_dev:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t lammerfalcon/nuxt3:dev .
+          docker push lammerfalcon/nuxt3:dev
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            docker pull lammerfalcon/nuxt3:dev
+            cd service/vps/dev
+            git checkout dev
+            git pull
+            docker-compose -f docker-compose.dev.yml up -d --build
