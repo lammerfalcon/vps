@@ -33,6 +33,10 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          env:
+            TAG: latest
+            PORT: 3000
+            SUBDOMAIN: lamemrfalcon.tech
           script: |
             docker pull lammerfalcon/nuxt3:latest
             cd service/main/vps
@@ -65,6 +69,10 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          env:
+            TAG: dev
+            PORT: 3001
+            SUBDOMAIN: dev.lamemrfalcon.tech
           script: |
             docker pull lammerfalcon/nuxt3:dev
             cd service/dev/vps
