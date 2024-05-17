@@ -5,5 +5,5 @@ services:
     build:
       context: .
     ports:
-      - "3000:${PORT}"
+      - "3000:3001"
     restart: always
