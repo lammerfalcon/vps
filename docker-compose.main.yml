@@ -1,0 +1,9 @@
+version: "3"
+services:
+  my-app:
+    image: lammerfalcon/nuxt3:latest
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    restart: always
