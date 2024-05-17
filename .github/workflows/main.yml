@@ -7,11 +7,14 @@ on:
       - dev
 
 jobs:
-  build_and_push:
+  deploy_main:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout the repo
+      - name: Checkout main branch
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Login to Dockerhub
         uses: docker/login-action@v2
@@ -19,43 +22,51 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image for main
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            TAG="latest"
-          else
-            TAG="dev"
-          fi
-          docker build -t lammerfalcon/nuxt3:$TAG .
-          docker push lammerfalcon/nuxt3:$TAG
+          docker build -t lammerfalcon/nuxt3:latest .
+          docker push lammerfalcon/nuxt3:latest
 
-      - name: Deploy to VPS
+      - name: Deploy to VPS (Main)
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-              TAG="latest"
-              PORT="3000"
-              SUBDOMAIN="mysite.com"
-              DEPLOY_DIR="service/main/vps"
-              BRANCH="main"
-            else
-              TAG="dev"
-              PORT="3001"
-              SUBDOMAIN="dev.mysite.com"
-              DEPLOY_DIR="service/dev/vps"
-              BRANCH="dev"
-            fi
-            docker pull lammerfalcon/nuxt3:$TAG
-            export TAG=$TAG
-            export PORT=$PORT
-            export SUBDOMAIN=$SUBDOMAIN
-            export DEPLOY_DIR=$DEPLOY_DIR
-            export BRANCH=$BRANCH
-            cd $DEPLOY_DIR
+            docker pull lammerfalcon/nuxt3:latest
+            cd service/main/vps
             git pull
-            git checkout $BRANCH
+            docker-compose up -d --build
+
+  deploy_dev:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image for dev
+        run: |
+          docker build -t lammerfalcon/nuxt3:dev .
+          docker push lammerfalcon/nuxt3:dev
+
+      - name: Deploy to VPS (Dev)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            docker pull lammerfalcon/nuxt3:dev
+            cd service/dev/vps
+            git pull
             docker-compose up -d --build
