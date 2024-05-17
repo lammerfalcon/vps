@@ -1,10 +1,13 @@
-version: "3"
+version: '3'
 services:
-  my-app:
-    container_name: dev
-    image: lammerfalcon/nuxt3:dev
-    build:
-      context: .
+  prod-container:
+    image: lammerfalcon/nuxt3:latest
     ports:
-      - "3000:3001"
+      - "3000:3000"
+    restart: always
+
+  dev-container:
+    image: lammerfalcon/nuxt3:latest
+    ports:
+      - "3001:3000"
     restart: always
