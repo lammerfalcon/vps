@@ -38,18 +38,19 @@ jobs:
             git checkout dev
             git pull
             docker-compose up -d --build
-
-      - name: Deploy to VPS - Main
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          script: |
-            docker stop prod-container || true
-            docker rm prod-container || true
-            docker pull lammerfalcon/nuxt3:latest
-            cd service/main/vps/
-            git checkout main
-            git pull
-            docker-compose up -d --build
+#
+#      - name: Deploy to VPS - Main
+#        if: ${{ github.ref == 'refs/heads/main' }}
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.VPS_IP }}
+#          username: ${{ secrets.VPS_USER }}
+#          password: ${{ secrets.VPS_PASSWORD }}
+#          script: |
+#            docker stop prod-container || true
+#            docker rm prod-container || true
+#            docker pull lammerfalcon/nuxt3:latest
+#            cd service/main/vps/
+#            git checkout main
+#            git pull
+#            docker-compose up -d --build
