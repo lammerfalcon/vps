@@ -36,7 +36,7 @@ jobs:
           env:
             TAG: latest
             PORT: 3000
-            SUBDOMAIN: lamemrfalcon.tech
+            SUBDOMAIN: lammerfalcon.tech
           script: |
             docker pull lammerfalcon/nuxt3:latest
             cd service/main/vps
@@ -72,7 +72,7 @@ jobs:
           env:
             TAG: dev
             PORT: 3001
-            SUBDOMAIN: dev.lamemrfalcon.tech
+            SUBDOMAIN: dev.lammerfalcon.tech
           script: |
             docker pull lammerfalcon/nuxt3:dev
             cd service/dev/vps
