@@ -1,8 +1,7 @@
 <template>
   <div>
-    {{data}}
-    DEV MODE test
-    <NuxtWelcome />
+    <h1>СОСАТЬ ДЕВ!</h1>
+    <NuxtLink to="https://lammerlfalcon.com" external> ПОСОСАТЬ НА ПРОД</NuxtLink>
   </div>
 </template>
 <script setup lang="ts">
