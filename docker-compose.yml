@@ -1,11 +1,9 @@
 version: "3"
 services:
   my-app:
-    image: lammerfalcon/nuxt3:${TAG}
+    image: lammerfalcon/nuxt3:latest
     build:
       context: .
     ports:
-      - "${PORT}:3000"
+      - "3000:3001"
     restart: always
-    environment:
-      - VIRTUAL_HOST=${SUBDOMAIN}
