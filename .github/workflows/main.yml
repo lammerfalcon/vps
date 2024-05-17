@@ -25,7 +25,6 @@ jobs:
           docker push lammerfalcon/nuxt3:latest
 
       - name: Deploy to VPS - Dev
-        if: github.ref == 'refs/heads/dev'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP }}
@@ -41,7 +40,6 @@ jobs:
             docker-compose up -d --build
 
       - name: Deploy to VPS - Main
-        if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP }}
