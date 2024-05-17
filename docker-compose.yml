@@ -7,7 +7,7 @@ services:
     restart: always
 
   dev-container:
-    image: lammerfalcon/nuxt3:latest
+    image: lammerfalcon/nuxt3:dev
     ports:
-      - "3000:3001"
+      - "3001:3001"
     restart: always
