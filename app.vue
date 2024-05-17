@@ -1,10 +1,9 @@
 <template>
   <div>
    SOSAT MAIN
-    BLYAT! EBANAYA ZAKORUCHKA!!!
-    <img src="/img.png" alt="">
+    BLYAT!
+
   </div>
 </template>
 <script setup lang="ts">
-const {data} = useFetch('/api/test')
 </script>
