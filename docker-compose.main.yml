@@ -1,6 +1,7 @@
 version: "3"
 services:
   my-app:
+    container_name: main
     image: lammerfalcon/nuxt3:latest
     build:
       context: .
