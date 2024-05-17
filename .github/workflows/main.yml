@@ -7,17 +7,11 @@ on:
       - dev
 
 jobs:
-  deploy_main:
+  build_and_push:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    env:
-      TAG: latest
-      PORT: 3000
     steps:
-      - name: Checkout main branch
+      - name: Checkout the repo
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Login to Dockerhub
         uses: docker/login-action@v2
@@ -25,59 +19,33 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image for main
+      - name: Build and push Docker image
         run: |
           docker build -t lammerfalcon/nuxt3:latest .
           docker push lammerfalcon/nuxt3:latest
 
-      - name: Deploy to VPS (Main)
+      - name: Deploy to VPS
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            docker pull lammerfalcon/nuxt3:latest
-            cd service/main/vps
-            git pull
-            docker-compose -f docker-compose.main.yml up -d --build
-
-  deploy_dev:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
-    env:
-      TAG: dev
-      PORT: 3001
-    steps:
-      - name: Checkout dev branch
-        uses: actions/checkout@v4
-        with:
-          ref: dev
-
-      - name: Set environment variables
-        run: |
-          export TAG=dev
-          export PORT=3001
-
-      - name: Login to Dockerhub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image for dev
-        run: |
-          docker build -t lammerfalcon/nuxt3:dev .
-          docker push lammerfalcon/nuxt3:dev
-
-      - name: Deploy to VPS (Dev)
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          script: |
-            docker pull lammerfalcon/nuxt3:dev
-            cd service/dev/vps
-            git pull
-            docker-compose up -d --build
+            if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+              # Deploy main branch
+              docker stop prod-container || true
+              docker rm prod-container || true
+              docker pull lammerfalcon/nuxt3:latest
+              cd service/main/vps/
+              git pull
+              docker-compose up -d --build
+            elif [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+              # Deploy dev branch
+              docker stop dev-container || true
+              docker rm dev-container || true
+              docker pull lammerfalcon/nuxt3:latest
+              cd service/dev/vps
+              git pull
+              docker-compose up -d --build
+            fi
