@@ -1,6 +1,7 @@
 <template>
   <div>
     {{data}}
+    DEV MODE
     <NuxtWelcome />
   </div>
 </template>
