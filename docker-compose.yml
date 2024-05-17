@@ -3,11 +3,11 @@ services:
   prod-container:
     image: lammerfalcon/nuxt3:latest
     ports:
-      - "3000:3000"
+      - "4000:3000"
     restart: always
 
   dev-container:
     image: lammerfalcon/nuxt3:latest
     ports:
-      - "3000:3001"
+      - "5000:3001"
     restart: always
