@@ -21,8 +21,13 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t lammerfalcon/nuxt3:latest .
-          docker push lammerfalcon/nuxt3:latest
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            docker build -t lammerfalcon/nuxt3:dev .
+            docker push lammerfalcon/nuxt3:dev
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            docker build -t lammerfalcon/nuxt3:latest .
+            docker push lammerfalcon/nuxt3:latest
+          fi
 
       - name: Deploy to VPS - Dev
         if: ${{ github.ref == 'refs/heads/dev' }}
@@ -33,13 +38,12 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd service/dev/vps/
-            docker stop vps-dev || true
-            docker rm vps-dev || true
-            docker pull lammerfalcon/nuxt3:latest
+            docker-compose down
+            docker pull lammerfalcon/nuxt3:dev
             git checkout dev
             git pull
-            docker-compose up -d --build
-#
+            docker-compose up -d --build dev-container
+
       - name: Deploy to VPS - Main
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: appleboy/ssh-action@master
@@ -49,9 +53,8 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd service/main/vps/
-            docker stop vps-main || true
-            docker rm vps-main || true
+            docker-compose down
             docker pull lammerfalcon/nuxt3:latest
             git checkout main
             git pull
-            docker-compose up -d --build
+            docker-compose up -d --build prod-container
