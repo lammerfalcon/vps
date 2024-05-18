@@ -33,8 +33,8 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd service/dev/vps/
-            docker stop vps_dev-container_1 || true
-            docker rm vps_dev-container_1 || true
+            docker stop vps-dev || true
+            docker rm vps-dev || true
             docker pull lammerfalcon/nuxt3:latest
             git checkout dev
             git pull
@@ -49,8 +49,8 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd service/main/vps/
-            docker stop vps_prod-container_1 || true
-            docker rm vps_prod-container_1 || true
+            docker stop vps-main || true
+            docker rm vps-main || true
             docker pull lammerfalcon/nuxt3:latest
             git checkout main
             git pull
