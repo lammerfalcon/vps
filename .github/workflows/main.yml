@@ -38,7 +38,8 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd service/dev/vps/
-            docker-compose down
+            docker-compose stop vps-dev
+            docker-compose rm -f vps-dev
             docker pull lammerfalcon/nuxt3:dev
             git checkout dev
             git pull
@@ -53,7 +54,8 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd service/main/vps/
-            docker-compose down
+            docker-compose stop vps-main
+            docker-compose rm -f vps-main
             docker pull lammerfalcon/nuxt3:latest
             git checkout main
             git pull
