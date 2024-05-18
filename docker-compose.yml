@@ -1,12 +1,14 @@
 version: '3'
 services:
   prod-container:
+    container_name: vps-main
     image: lammerfalcon/nuxt3:latest
     ports:
       - "3000:3000"
     restart: always
 
   dev-container:
+    container_name: vps-dev
     image: lammerfalcon/nuxt3:dev
     ports:
       - "3001:3000"

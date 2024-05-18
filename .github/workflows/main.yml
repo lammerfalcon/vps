@@ -32,10 +32,10 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
+            cd service/dev/vps/
             docker stop vps_dev-container_1 || true
             docker rm vps_dev-container_1 || true
             docker pull lammerfalcon/nuxt3:latest
-            cd service/dev/vps/
             git checkout dev
             git pull
             docker-compose up -d --build
@@ -48,10 +48,10 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
+            cd service/main/vps/
             docker stop vps_prod-container_1 || true
             docker rm vps_prod-container_1 || true
             docker pull lammerfalcon/nuxt3:latest
-            cd service/main/vps/
             git checkout main
             git pull
             docker-compose up -d --build
